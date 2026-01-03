@@ -138,16 +138,22 @@ export const parseTransaction = (
         const sentSymbol = firstSent.coinType.split('::').pop();
         const sentAmountNum = Math.abs(Number(firstSent.amount)) / 1_000_000_000;
         const sentAmount = sentAmountNum.toFixed(2);
-        const recvAmount = (Math.abs(Number(firstRecv.amount)) / 1_000_000_000).toFixed(2);
+        const recvAmountNum = Math.abs(Number(firstRecv.amount)) / 1_000_000_000;
+        const recvAmount = recvAmountNum.toFixed(2);
         const recvSymbol = firstRecv.coinType.split('::').pop();
 
         let usdLabel = '';
         if (firstSent.coinType.toLowerCase() === '0x2::sui::sui' && suiPrice) {
-            totalUsdValue = sentAmountNum * suiPrice;
-            usdLabel = ` (~$${totalUsdValue.toFixed(2)})`;
+            const usd = sentAmountNum * suiPrice;
+            totalUsdValue += usd;
+            usdLabel = ` (~$${usd.toFixed(2)})`;
+        } else if (firstRecv.coinType.toLowerCase() === '0x2::sui::sui' && suiPrice) {
+            const usd = recvAmountNum * suiPrice;
+            totalUsdValue += usd;
+            usdLabel = ` (~$${usd.toFixed(2)})`;
         }
 
-        summaryParts.push(`This appears to be a swap of ${sentAmount} ${sentSymbol}${usdLabel} for ${recvAmount} ${recvSymbol}.`);
+        summaryParts.push(`This appears to be a swap of ${sentAmount} ${sentSymbol}${sentChanges[0].coinType.toLowerCase() === '0x2::sui::sui' ? usdLabel : ''} for ${recvAmount} ${recvSymbol}${firstRecv.coinType.toLowerCase() === '0x2::sui::sui' ? usdLabel : ''}.`);
     } else if (sentChanges.length > 0) {
         const uniqueSent = Array.from(new Set(sentChanges.map(c => c.coinType.split('::').pop())));
         if (uniqueSent.length === 1) {
@@ -157,8 +163,9 @@ export const parseTransaction = (
 
             let usdLabel = '';
             if (sentChanges[0].coinType.toLowerCase() === '0x2::sui::sui' && suiPrice) {
-                totalUsdValue = totalSUI * suiPrice;
-                usdLabel = ` (~$${totalUsdValue.toFixed(2)})`;
+                const usd = totalSUI * suiPrice;
+                totalUsdValue += usd;
+                usdLabel = ` (~$${usd.toFixed(2)})`;
             }
 
             summaryParts.push(`Sent ${totalSUI.toFixed(4)} ${sym}${usdLabel}.`);
@@ -169,8 +176,17 @@ export const parseTransaction = (
         const uniqueRecv = Array.from(new Set(receivedChanges.map(c => c.coinType.split('::').pop())));
         if (uniqueRecv.length === 1) {
             const sym = uniqueRecv[0];
-            const total = receivedChanges.reduce((acc, c) => acc + Math.abs(Number(c.amount)), 0);
-            summaryParts.push(`Received ${(total / 1_000_000_000).toFixed(4)} ${sym}.`);
+            const totalMIST = receivedChanges.reduce((acc, c) => acc + Math.abs(Number(c.amount)), 0);
+            const totalSUI = totalMIST / 1_000_000_000;
+
+            let usdLabel = '';
+            if (receivedChanges[0].coinType.toLowerCase() === '0x2::sui::sui' && suiPrice) {
+                const usd = totalSUI * suiPrice;
+                totalUsdValue += usd;
+                usdLabel = ` (~$${usd.toFixed(2)})`;
+            }
+
+            summaryParts.push(`Received ${totalSUI.toFixed(4)} ${sym}${usdLabel}.`);
         } else {
             summaryParts.push(`Received ${uniqueRecv.length} types of assets.`);
         }

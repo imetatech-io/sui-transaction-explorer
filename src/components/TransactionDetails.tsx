@@ -51,6 +51,10 @@ export default function TransactionDetails({ data, network }: TransactionDetails
 
     return (
         <div className="detail-section">
+            {/* Transaction Flow at Top */}
+            <div className="section-title" style={{ marginTop: 0 }}>Transaction Flow</div>
+            <FlowDiagram data={data} />
+
             {/* Meta Card */}
             <div className="glass-card" style={{ marginBottom: '2rem', position: 'relative' }}>
                 <div style={{ position: 'absolute', top: '1rem', right: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -134,9 +138,6 @@ export default function TransactionDetails({ data, network }: TransactionDetails
                 </div>
             </div>
 
-            {/* Simple Visualization */}
-            <div className="section-title" style={{ marginTop: '3rem' }}>Transaction Flow</div>
-            <FlowDiagram data={data} />
 
             <div className="details-grid">
                 <div>
