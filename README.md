@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sui Transaction Explainer
 
-## Getting Started
+A professional, feature-rich web application designed to decode complex Sui blockchain transactions into clear, human-readable summaries. Built for the Sui RFP Program.
 
-First, run the development server:
+## 🚀 Live Demo
+[Link to your hosted MVP]
 
+## ✨ Features
+- **Plain Language Summaries**: Translates hex codes and raw data into sentences like "Alice transferred NFT #1234 to Bob."
+- **SUI Denomination**: Automatically converts gas costs and balance changes from MIST to SUI.
+- **Transaction Flow Visualization**: Visual representation of the Sender → Action → Result flow.
+- **Smart Contract Insights**: Extracts and labels Move calls, modules, and functions.
+- **Premium Aesthetics**: High-performance UI designed with Glassmorphism and modern typography.
+- **Social Sharing**: Dynamic OpenGraph metadata for sharing specific transaction digests.
+
+## 🏗️ Architecture
+- **Framework**: Next.js (App Router) for a robust full-stack foundation.
+- **Engine**: Client-side fetching using `@mysten/sui` to ensure requests are distributed across users (avoiding shared rate limits).
+- **Styles**: Vanilla CSS for maximum performance and design flexibility.
+- **Parsing Logic**: Custom utility layer that interprets `ProgrammableTransaction` commands and `ObjectChanges`.
+
+## 📊 Data Source
+- **Sui RPC**: Interacts directly with the Sui Mainnet RPC via the official `@mysten/sui` SDK.
+- **Network**: Defaults to `mainnet` (configurable via environment variables).
+
+## 🛠️ Installation & Usage
+
+1. **Clone and Install**:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd frontend
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Run Development Server**:
+```bash
+nvm use 20
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Build for Production**:
+```bash
+npm run build
+npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📝 License
+MIT
