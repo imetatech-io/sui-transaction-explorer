@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import TransactionDetails from '@/components/TransactionDetails';
-import { fetchTransactionBlock, resolveSuiNS } from '@/utils/suiClient';
+import { fetchTransactionBlock, SuiNetwork, resolveSuiNS, getSuiPrice } from '@/utils/suiClient';
 import { parseTransaction } from '@/utils/parser';
 import Link from 'next/link';
 
@@ -13,11 +13,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     try {
         const tx = await fetchTransactionBlock(digest);
         const sender = tx.transaction?.data.sender;
-        let senderName = null;
-        if (sender) {
-            senderName = await resolveSuiNS(sender);
-        }
-        const parsed = parseTransaction(tx, senderName);
+        const [senderName, suiPrice] = await Promise.all([
+            sender ? resolveSuiNS(sender) : Promise.resolve(null),
+            getSuiPrice()
+        ]);
+        const parsed = parseTransaction(tx, senderName, suiPrice);
         return {
             title: `Sui Transaction ${digest.slice(0, 8)}... | Explainer`,
             description: parsed.summary,
@@ -43,11 +43,11 @@ export default async function TransactionPage({ params }: Props) {
     try {
         const tx = await fetchTransactionBlock(digest);
         const sender = tx.transaction?.data.sender;
-        let senderName = null;
-        if (sender) {
-            senderName = await resolveSuiNS(sender);
-        }
-        data = parseTransaction(tx, senderName);
+        const [senderName, suiPrice] = await Promise.all([
+            sender ? resolveSuiNS(sender) : Promise.resolve(null),
+            getSuiPrice()
+        ]);
+        data = parseTransaction(tx, senderName, suiPrice);
     } catch (err: any) {
         error = err.message || 'Failed to fetch transaction';
     }

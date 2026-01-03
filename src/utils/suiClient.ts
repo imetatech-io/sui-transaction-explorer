@@ -50,3 +50,14 @@ export const resolveSuiNS = async (address: string, network: SuiNetwork = 'mainn
     return null;
   }
 };
+
+export const getSuiPrice = async (): Promise<number | null> => {
+  try {
+    const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=sui&vs_currencies=usd');
+    const data = await response.json();
+    return data?.sui?.usd || null;
+  } catch (error) {
+    console.error('Error fetching SUI price:', error);
+    return null;
+  }
+};

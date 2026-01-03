@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import TransactionInput from '@/components/TransactionInput';
 import TransactionDetails from '@/components/TransactionDetails';
 import { ParsedTransaction, parseTransaction } from '@/utils/parser';
-import { fetchTransactionBlock, SuiNetwork, resolveSuiNS } from '@/utils/suiClient';
+import { fetchTransactionBlock, SuiNetwork, resolveSuiNS, getSuiPrice } from '@/utils/suiClient';
 
 function HomeContent() {
   const [data, setData] = useState<ParsedTransaction | null>(null);
@@ -26,16 +26,13 @@ function HomeContent() {
 
     try {
       const tx = await fetchTransactionBlock(digest, network);
-
-      // Resolve SuiNS for sender
-      const sender = tx.transaction?.data.sender;
-      let senderName = null;
-      if (sender) {
-        senderName = await resolveSuiNS(sender, network);
-      }
-
-      const result = parseTransaction(tx, senderName);
-      setData(result);
+      const sender = (tx as any).transaction?.data.sender;
+      const [senderName, suiPrice] = await Promise.all([
+        sender ? resolveSuiNS(sender, network) : Promise.resolve(null),
+        getSuiPrice()
+      ]);
+      const parsed = parseTransaction(tx, senderName, suiPrice);
+      setData(parsed);
     } catch (err: any) {
       console.error('Search error:', err);
       let message = err.message || 'Failed to analyze transaction';

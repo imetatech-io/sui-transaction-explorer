@@ -72,6 +72,12 @@ export default function TransactionDetails({ data, network }: TransactionDetails
                         <span className="label">Timestamp</span>
                         <span className="value">{data.timestamp || 'N/A'}</span>
                     </div>
+                    {data.usdValue && (
+                        <div className="meta-item">
+                            <span className="label">Estimated Value</span>
+                            <span className="value" style={{ color: 'var(--accent)', fontWeight: 600 }}>{data.usdValue}</span>
+                        </div>
+                    )}
                 </div>
 
                 <div className="meta-item" style={{ marginTop: '2rem' }}>
