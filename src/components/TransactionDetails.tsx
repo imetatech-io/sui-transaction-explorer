@@ -81,7 +81,10 @@ export default function TransactionDetails({ data, network }: TransactionDetails
                     </span>
                     <span className="value" style={{ fontSize: '0.9rem' }}>
                         {data.senderName ? (
-                            <span style={{ color: 'var(--accent)', fontWeight: 600 }}>{data.senderName}</span>
+                            <span className="identity-badge">
+                                <span>👤</span>
+                                {data.senderName}
+                            </span>
                         ) : data.sender}
                     </span>
                 </div>

@@ -570,6 +570,7 @@ h1 {
         transform: translateY(-5px);
     }
 }
+
 /* Security Card */
 .security-card {
     padding: 1.5rem;
@@ -615,15 +616,37 @@ h1 {
     line-height: 1.4;
 }
 
-.risk-low .risk-indicator { background: var(--success); box-shadow: 0 0 10px var(--success); }
-.risk-low .risk-label { color: var(--success); }
+.risk-low .risk-indicator {
+    background: var(--success);
+    box-shadow: 0 0 10px var(--success);
+}
 
-.risk-medium .risk-indicator { background: #ffcc00; box-shadow: 0 0 10px #ffcc00; }
-.risk-medium .risk-label { color: #ffcc00; }
+.risk-low .risk-label {
+    color: var(--success);
+}
 
-.risk-high .risk-indicator { background: var(--failure); box-shadow: 0 0 10px var(--failure); }
-.risk-high .risk-label { color: var(--failure); }
-.risk-high { background: rgba(255, 69, 69, 0.05) !important; border-color: rgba(255, 69, 69, 0.2) !important; }
+.risk-medium .risk-indicator {
+    background: #ffcc00;
+    box-shadow: 0 0 10px #ffcc00;
+}
+
+.risk-medium .risk-label {
+    color: #ffcc00;
+}
+
+.risk-high .risk-indicator {
+    background: var(--failure);
+    box-shadow: 0 0 10px var(--failure);
+}
+
+.risk-high .risk-label {
+    color: var(--failure);
+}
+
+.risk-high {
+    background: rgba(255, 69, 69, 0.05) !important;
+    border-color: rgba(255, 69, 69, 0.2) !important;
+}
 
 /* Interactive Peek */
 .peek-trigger {
@@ -677,8 +700,15 @@ h1 {
 }
 
 @keyframes slideUp {
-    from { opacity: 0; transform: translateX(-50%) translateY(10px); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
 }
 
 /* Page Layout Tweaks */
@@ -688,6 +718,26 @@ h1 {
 
 @media (max-width: 1024px) {
     .mobile-grid {
-        grid-template_columns: 1fr !important;
+        grid-template-columns: 1fr !important;
     }
+}
+
+.identity-badge {
+    background: var(--accent-glow);
+    color: var(--accent);
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: 1px solid rgba(77, 162, 255, 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+[data-theme='light'] .identity-badge {
+    border-color: var(--accent);
+    background: #eef7ff;
+    color: #0060df;
+    /* Darker blue for contrast in light mode */
 }

@@ -30,22 +30,30 @@ export default function FlowDiagram({ data }: FlowDiagramProps) {
         {/* Sender Node */}
         <g className="flow-node">
           <circle cx="100" cy="100" r="40" fill="var(--glass-bg)" stroke={flowColor} strokeWidth="2" />
-          <text x="100" y="100" dy=".3em" textAnchor="middle" fill="white" style={{ fontSize: '10px' }}>Sender</text>
-          <text x="100" y="160" textAnchor="middle" fill="white" style={{ fontSize: '12px', fontWeight: 500 }}>{displayName}</text>
+          <text x="100" y="100" dy=".3em" textAnchor="middle" fill="var(--text-secondary)" style={{ fontSize: '10px' }}>Sender</text>
+          <text
+            x="100"
+            y="160"
+            textAnchor="middle"
+            fill={senderName ? 'var(--accent)' : 'var(--foreground)'}
+            style={{ fontSize: '12px', fontWeight: 600 }}
+          >
+            {displayName}
+          </text>
         </g>
 
         {/* Action Node */}
         <g className="flow-node">
           <rect x="350" y="60" width="100" height="80" rx="12" fill="var(--glass-bg)" stroke={flowColor} strokeWidth="2" />
-          <text x="400" y="100" dy=".3em" textAnchor="middle" fill="white" style={{ fontSize: '12px', fontWeight: 600 }}>Action</text>
-          <text x="400" y="120" textAnchor="middle" fill="white" style={{ fontSize: '10px' }}>Contract</text>
+          <text x="400" y="100" dy=".3em" textAnchor="middle" fill="var(--foreground)" style={{ fontSize: '12px', fontWeight: 600 }}>Action</text>
+          <text x="400" y="120" textAnchor="middle" fill="var(--text-secondary)" style={{ fontSize: '10px' }}>Contract</text>
         </g>
 
         {/* Result Node */}
         <g className="flow-node">
           <circle cx="700" cy="100" r="40" fill="var(--glass-bg)" stroke={flowColor} strokeWidth="2" />
-          <text x="700" y="100" dy=".3em" textAnchor="middle" fill="white" style={{ fontSize: '10px' }}>Result</text>
-          <text x="700" y="160" textAnchor="middle" fill="white" style={{ fontSize: '12px', fontWeight: 500 }}>
+          <text x="700" y="100" dy=".3em" textAnchor="middle" fill="var(--text-secondary)" style={{ fontSize: '10px' }}>Result</text>
+          <text x="700" y="160" textAnchor="middle" fill="var(--foreground)" style={{ fontSize: '12px', fontWeight: 600 }}>
             {data.objects.mutated.length + data.objects.created.length} Changes
           </text>
         </g>
