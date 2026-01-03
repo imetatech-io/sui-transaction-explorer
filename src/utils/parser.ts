@@ -6,6 +6,7 @@ export interface ParsedTransaction {
     timestamp?: string;
     gasUsed: string;
     sender: string;
+    senderName?: string | null;
     summary: string;
     riskLevel: 'low' | 'medium' | 'high';
     riskScore: number;
@@ -42,7 +43,10 @@ const getProtocolName = (pkgId: string) => {
     return null;
 };
 
-export const parseTransaction = (tx: SuiTransactionBlockResponse): ParsedTransaction => {
+export const parseTransaction = (
+    tx: SuiTransactionBlockResponse,
+    senderName?: string | null
+): ParsedTransaction => {
     const { digest, effects, timestampMs, transaction } = tx;
     const status = effects?.status?.status === 'success' ? 'success' : 'failure';
 
@@ -91,7 +95,8 @@ export const parseTransaction = (tx: SuiTransactionBlockResponse): ParsedTransac
 
     // status and sender prefix
     const statusText = status === 'success' ? 'successfully' : 'unsuccessfully';
-    summaryParts.push(`${sender.slice(0, 6)}... ${statusText} performed a transaction.`);
+    const displayName = senderName || `${sender.slice(0, 6)}...`;
+    summaryParts.push(`${displayName} ${statusText} performed a transaction.`);
 
     // 2. Detect Action Type
     const normalizedSender = sender.toLowerCase();
@@ -217,6 +222,7 @@ export const parseTransaction = (tx: SuiTransactionBlockResponse): ParsedTransac
         timestamp: timestampMs ? new Date(parseInt(timestampMs)).toLocaleString() : undefined,
         gasUsed,
         sender,
+        senderName,
         summary,
         riskLevel,
         riskScore,

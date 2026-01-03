@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ParsedTransaction } from '@/utils/parser';
 import { SuiNetwork } from '@/utils/suiClient';
 import ObjectPeek from './ObjectPeek';
+import FlowDiagram from './FlowDiagram';
 
 interface TransactionDetailsProps {
     data: ParsedTransaction;
@@ -78,7 +79,11 @@ export default function TransactionDetails({ data, network }: TransactionDetails
                         Sender
                         <CopyButton text={data.sender} />
                     </span>
-                    <span className="value" style={{ fontSize: '0.9rem' }}>{data.sender}</span>
+                    <span className="value" style={{ fontSize: '0.9rem' }}>
+                        {data.senderName ? (
+                            <span style={{ color: 'var(--accent)', fontWeight: 600 }}>{data.senderName}</span>
+                        ) : data.sender}
+                    </span>
                 </div>
             </div>
 
@@ -122,33 +127,7 @@ export default function TransactionDetails({ data, network }: TransactionDetails
 
             {/* Simple Visualization */}
             <div className="section-title" style={{ marginTop: '3rem' }}>Transaction Flow</div>
-            <div className="glass-card visualization-box">
-                <div className="flow-container">
-                    <div className="flow-node">
-                        <span className="label">Sender</span>
-                        <div className="node-icon">👤</div>
-                        <span className="value">{data.sender.slice(0, 8)}...</span>
-                    </div>
-                    <div className="flow-arrow">
-                        <div className="arrow-line"></div>
-                        <div className="arrow-head"></div>
-                    </div>
-                    <div className="flow-node">
-                        <span className="label">Action</span>
-                        <div className="node-icon">{data.moveCalls.length > 0 ? '⚙️' : '💸'}</div>
-                        <span className="value">{data.moveCalls.length > 0 ? 'Smart Contract' : 'Transfer'}</span>
-                    </div>
-                    <div className="flow-arrow">
-                        <div className="arrow-line"></div>
-                        <div className="arrow-head"></div>
-                    </div>
-                    <div className="flow-node">
-                        <span className="label">Result</span>
-                        <div className="node-icon">📦</div>
-                        <span className="value">{data.objects.created.length + data.objects.mutated.length} Changes</span>
-                    </div>
-                </div>
-            </div>
+            <FlowDiagram data={data} />
 
             <div className="details-grid">
                 <div>

@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import TransactionInput from '@/components/TransactionInput';
 import TransactionDetails from '@/components/TransactionDetails';
 import { ParsedTransaction, parseTransaction } from '@/utils/parser';
-import { fetchTransactionBlock, SuiNetwork } from '@/utils/suiClient';
+import { fetchTransactionBlock, SuiNetwork, resolveSuiNS } from '@/utils/suiClient';
 
 function HomeContent() {
   const [data, setData] = useState<ParsedTransaction | null>(null);
@@ -26,7 +26,15 @@ function HomeContent() {
 
     try {
       const tx = await fetchTransactionBlock(digest, network);
-      const result = parseTransaction(tx);
+
+      // Resolve SuiNS for sender
+      const sender = tx.transaction?.data.sender;
+      let senderName = null;
+      if (sender) {
+        senderName = await resolveSuiNS(sender, network);
+      }
+
+      const result = parseTransaction(tx, senderName);
       setData(result);
     } catch (err: any) {
       console.error('Search error:', err);

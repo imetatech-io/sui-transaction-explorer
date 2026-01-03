@@ -36,3 +36,17 @@ export const getObject = async (objectId: string, network: SuiNetwork = 'mainnet
     },
   });
 };
+
+export const resolveSuiNS = async (address: string, network: SuiNetwork = 'mainnet') => {
+  const client = createSuiClient(network);
+  try {
+    const names = await client.resolveNameServiceNames({
+      address,
+      limit: 1,
+    });
+    return names.data[0] || null;
+  } catch (error) {
+    console.error('SuiNS Resolution Error:', error);
+    return null;
+  }
+};
